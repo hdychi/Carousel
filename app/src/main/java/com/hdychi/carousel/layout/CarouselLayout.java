@@ -41,6 +41,11 @@ public class CarouselLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 测量阶段，按照屏幕内可见的子view数量计算子view的最大宽度
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int selfHeightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -88,6 +93,14 @@ public class CarouselLayout extends ViewGroup {
                 selfHeightSize:maxHeight);
     }
 
+    /**
+     * 从左到右安排子view，每个子 view相当于在一个等分的block里
+     * @param changed
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
+     */
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         int childCount = getChildCount();
@@ -108,6 +121,12 @@ public class CarouselLayout extends ViewGroup {
     float lastX,lastY;
     float firstX,firstY;
     boolean isMoving;
+
+    /**
+     * 监听触摸事件，根据滑动距离滚动view，要滑出子view分布范围时不再滑动
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
