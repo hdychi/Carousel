@@ -3,6 +3,7 @@ package com.hdychi.carousel.layout;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,6 +12,7 @@ import com.hdychi.carousel.R;
 public class CarouselLayout extends ViewGroup {
     private static final int DEFAULT_WIDTH = 50;
     private static final int DEFULT_ITEM_COUNT = 5;
+    private static final int TOUCH_SLOP = 50;
     private int visibleItem = 5;
 
     public CarouselLayout(Context context) {
@@ -101,5 +103,48 @@ public class CarouselLayout extends ViewGroup {
                     i * blockWidth + (blockWidth - childWidth) / 2 + childWidth,
                     selfHeight - (selfHeight - childHeight) / 2);
         }
+    }
+
+    float lastX,lastY;
+    float firstX,firstY;
+    boolean isMoving;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                firstX = event.getRawX();
+                firstY = event.getRawY();
+                lastX = event.getRawX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (!isMoving) {
+                    if (Math.abs(event.getRawX() - firstX) > Math.abs(event.getRawY() - firstY)
+                            && Math.abs(event.getRawX() - firstX) > TOUCH_SLOP) {
+                        isMoving = true;
+                    }
+                    lastX = event.getRawX();
+                }
+                if (isMoving) {
+                    float offset = event.getRawX() - lastX;
+                    if (getScrollX() - offset < 0) {
+                        if (offset > 0) {
+                            offset = 0;
+                        }
+                    }
+                    if (getScrollX() - offset > getChildCount() * getWidth() / visibleItem - getWidth()) {
+                        if (offset < 0) {
+                            offset = 0;
+                        }
+                    }
+                    scrollBy(-(int)offset,0);
+                }
+                lastX = event.getRawX();
+                lastY = event.getRawY();
+                break;
+             case MotionEvent.ACTION_CANCEL:
+                 isMoving = false;
+                 break;
+        }
+       return true;
     }
 }
