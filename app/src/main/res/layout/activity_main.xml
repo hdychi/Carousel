@@ -15,6 +15,11 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:visibleItem="3">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:id="@+id/btn" />
         <include layout="@layout/carousel_item"/>
         <include layout="@layout/carousel_item"/>
         <include layout="@layout/carousel_item"/>

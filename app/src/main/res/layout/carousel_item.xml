@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@drawable/test"/>
+        android:background="@drawable/test" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

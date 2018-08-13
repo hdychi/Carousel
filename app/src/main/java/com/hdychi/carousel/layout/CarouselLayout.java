@@ -166,4 +166,32 @@ public class CarouselLayout extends ViewGroup {
         }
        return true;
     }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                firstX = event.getRawX();
+                firstY = event.getRawY();
+                lastX = event.getRawX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (!isMoving) {
+                    if (Math.abs(event.getRawX() - firstX) > Math.abs(event.getRawY() - firstY)
+                            && Math.abs(event.getRawX() - firstX) > TOUCH_SLOP) {
+                        isMoving = true;
+                    }
+                }
+                if (isMoving) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            case MotionEvent.ACTION_CANCEL:
+                isMoving = false;
+                break;
+        }
+        return false;
+    }
 }
